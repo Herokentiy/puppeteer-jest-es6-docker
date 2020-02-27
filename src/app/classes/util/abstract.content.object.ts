@@ -7,7 +7,7 @@ import {
   itemOutOfBoundExceptionMessage,
   selectExceptionMessage,
 } from '@const/global/error.messages'
-import { Cookie, DirectNavigationOptions, ElementHandle } from 'puppeteer'
+import {Cookie, DirectNavigationOptions, ElementHandle, SetCookie} from 'puppeteer'
 import { ENTER } from '@const/global/keyboard.keys'
 import { buildSpecificTempDir } from '@const/global/paths'
 import {
@@ -97,7 +97,7 @@ export default class AbstractContentObject extends Checker {
     await this._page.goForward()
   }
 
-  async setCookie(...cookies: Cookie[]) {
+  async setCookie(...cookies: SetCookie[]) {
     await this._page.setCookie(...cookies)
   }
 
@@ -504,6 +504,11 @@ export default class AbstractContentObject extends Checker {
   async type(selector: string, text: string, timeout = defaultWaitTimer) {
     await super.waitFor(selector, timeout)
     await this._page.type(selector, text)
+  }
+
+  async focus (selector: string, timeout = defaultWaitTimer) {
+    await super.waitFor(selector, timeout)
+    await this._page.focus(selector)
   }
 
   async selectOption(selector: string,
