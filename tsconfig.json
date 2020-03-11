@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        // Target latest version of ECMAScript.
+        "sourceMap": true,
+        // Target latest version of ECMAScript.,
         "target": "esnext",
         // Process & infer types from .js files.
         "allowJs": true,

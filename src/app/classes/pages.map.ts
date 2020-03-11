@@ -11,8 +11,7 @@ import ResetPasswordPage from '@components/page/reset.password.page'
 import AccountPage from '@components/page/account.page'
 import LoginModal from '@components/modal/login.modal'
 import Alert from '@components/message/alert.message'
-import PersonalManagerModal
-  from '@components/modal/common/personal.manager.modal'
+import PersonalManagerModal from '@components/modal/common/personal.manager.modal'
 import BaseModal from '@components/modal/common/base.modal'
 import ProductLandingPage from '@components/page/listing/product.landing.page'
 import Basket from '@components/page/basket.page'
@@ -23,8 +22,7 @@ import Breadcrumbs from '@components/shared/breadcrumbs'
 import ToastModal from '@components/modal/toast.modal'
 import OrderRepository from '@components/atg/dynadmin/repository/order'
 import GoogleEmail from '@components/shared/email'
-import ProfileAdapterRepository
-  from '@components/atg/dynadmin/repository/profile.adaptory'
+import ProfileAdapterRepository from '@components/atg/dynadmin/repository/profile.adaptory'
 import Rest from '@classes/util/rest'
 
 interface PageParent {
