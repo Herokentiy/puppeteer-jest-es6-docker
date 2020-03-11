@@ -5,24 +5,20 @@ import { browser } from '@config/jest.settings'
 
 const path = 'https://www.letu.ru/';
 const LetuPage = po.rest;
+async function openHomePage() {
+  await LetuPage.setCookie( { name: "cityGuessed", value: "true", url: path } );
+  await LetuPage.setUserAgent('AutoTest');
+  await LetuPage.open(path, true, undefined);
+}
 
-singlePack('Set cookie', async () => {
-  test('Set cookie from Letu', async () => {
-    await LetuPage.open(path, true, undefined);
-    const cookieObject = {
-      "name": "cityGuessed",
-      "value": "true",
-    };
-    await LetuPage.setCookie(cookieObject);
-    await LetuPage.reload();
-    const result = await LetuPage.getCookies();
-    //console.log(`result ${JSON.stringify(result)}`);
-    //console.log(JSON.stringify(result).search(/{([^{}]*)"name":"cityGuessed"([^{}]*)"value":"true"([^{}]*)}/g))
-    expect( JSON.stringify(result).search(/{([^{}]*)"name":"cityGuessed"([^{}]*)"value":"true"([^{}]*)}/g)).not.toEqual(-1);
+singlePack('Set cookie and useragent', async () => {
+  test(`Set  and expected cookie and user agent from page: "${path}"`, async () => {
+    await openHomePage();
+    expect( JSON.stringify(await LetuPage.getCookies()).search(/{([^{}]*)"name":"cityGuessed"([^{}]*)"value":"true"([^{}]*)}/g)).not.toEqual(-1);
   });
 });
 
-
+// --- * FIRST TASK * ---
 singlePack('[First Task] Error Message Test',  () => {
 
   const subscribeSelectors = {
@@ -38,14 +34,14 @@ singlePack('[First Task] Error Message Test',  () => {
     "invalidEmail": {text: "Неверный формат email", location: subscribeSelectors.divErrorBox},
   };
 
-  const newRandomEmail = faker.internet.email();
+  const oneRandomEmail = faker.internet.email();
 
   const emailsTest = [{
-      email: newRandomEmail,
-      result : expectedMessage.successfulSubscribe,
-    },
+    email: oneRandomEmail,
+    result : expectedMessage.successfulSubscribe,
+  },
     {
-      email: newRandomEmail,
+      email: oneRandomEmail,
       result : expectedMessage.alreadySubscribed,
     },
     {
@@ -53,18 +49,18 @@ singlePack('[First Task] Error Message Test',  () => {
       result : expectedMessage.alreadySubscribed,
     },
     {
-      email: "jhj143kj1@gdbd.dfg",
+      email: "a123dq43wsf3as4313*/*d",
       result : expectedMessage.invalidEmail,
     },
     {
-      email: "a123dq43wsf3as4313*/*d",
+      email: "jhj143kj1@gdbd.dfg",
       result : expectedMessage.invalidEmail,
     }];
 
 
   emailsTest.forEach (async (obj) => {
     test(`Checked email: "${obj.email}" expected: "${obj.result.text}"`, async () => {
-      await LetuPage.open(path);
+      await openHomePage();
       await LetuPage.hover(subscribeSelectors.inputFieldEmail);
       // await LetuPage.type(subscribeSelectors.inputFieldEmail, "");
       // await LetuPage.clickPuppeteer(subscribeSelectors.buttonSubscribe);
@@ -75,15 +71,33 @@ singlePack('[First Task] Error Message Test',  () => {
       expect(obj.result.text).toEqual(result);
     });
   });
-
 });
-//
-// singlePack('[Second Task] Promotion Product Name Test', () => {
-//   test('Second Task', async () => {
-//     console.log("Run test Second ....")
-//   });
-// });
-//
+// --- * FIRST TASK * ---
+
+
+singlePack('[Second Task] Promotion Product Name Test', () => {
+  const selector = {
+    allActionsButton: '.header-bottom li a[href*="/promos"]',
+    actionsItems:".promo-list-item",
+    resultListForPromo: '.LETUR-PromoResultsList .products-list__item-container',
+    pdpItemHeader: 'h1',
+  };
+
+  test('Second Task', async () => {
+    await openHomePage();
+    await LetuPage.clickPuppeteer(selector.allActionsButton);
+    await LetuPage.clickPuppeteer(selector.actionsItems);
+    await LetuPage.clickElementFromList(selector.resultListForPromo);
+    let result = LetuPage.getText(selector.pdpItemHeader);
+    console.log(`My name this is: ${result}`);
+
+
+
+
+    console.log("Run test Second ....")
+  });
+});
+
 // singlePack('[Third Task] Edik Un-login Test', () => {
 //   test('Third Task', async () => {
 //     console.log("Run test Third ....")
@@ -104,8 +118,7 @@ singlePack('[First Task] Error Message Test',  () => {
 // });
 
 singlePack('Example single Pack tests for Letu.ru', () => {
-
-  test('Example task for letu.ru', async () => {
+  test('Close Browser', async () => {
 
 //     const LetuPage = po.rest
 //     const path = 'https://www.letu.ru/product/unicorns-approve-podarochnyi-paket-l-etoile-selection-unicorns-approve/67300070/sku/81700180'

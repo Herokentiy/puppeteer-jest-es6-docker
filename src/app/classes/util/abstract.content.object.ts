@@ -468,6 +468,10 @@ export default class AbstractContentObject extends Checker {
     }
   }
 
+  async setUserAgent(userAgent: string) {
+    await this._page.setUserAgent(userAgent)
+  }
+
   async scrollTo(selector: string, timeout = defaultWaitTimer) {
     await super.waitFor(selector, timeout)
     const result = await this._page.evaluate((selector: string) => {
