@@ -15,6 +15,8 @@ singlePack('Set cookie and useragent', async () => {
   test(`Set  and expected cookie and user agent from page: "${path}"`, async () => {
     await openHomePage();
     expect( JSON.stringify(await LetuPage.getCookies()).search(/{([^{}]*)"name":"cityGuessed"([^{}]*)"value":"true"([^{}]*)}/g)).not.toEqual(-1);
+    const userAgent = await LetuPage.getUserAgent()
+    console.log(userAgent)
   });
 });
 
