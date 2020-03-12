@@ -5,20 +5,22 @@ import { browser } from '@config/jest.settings'
 
 const path = 'https://www.letu.ru/';
 const LetuPage = po.rest;
+
 async function openHomePage() {
   await LetuPage.setCookie( { name: "cityGuessed", value: "true", url: path } );
   await LetuPage.setUserAgent('AutoTest');
   await LetuPage.open(path, true, undefined);
 }
-
+// --- * COOKIE and USERAGENT * ---
 singlePack('Set cookie and useragent', async () => {
   test(`Set  and expected cookie and user agent from page: "${path}"`, async () => {
     await openHomePage();
     expect( JSON.stringify(await LetuPage.getCookies()).search(/{([^{}]*)"name":"cityGuessed"([^{}]*)"value":"true"([^{}]*)}/g)).not.toEqual(-1);
     const userAgent = await LetuPage.getUserAgent()
-    console.log(userAgent)
+    expect(userAgent).toEqual("AutoTest")
   });
 });
+// --- * COOKIE and USERAGENT * ---
 
 // --- * FIRST TASK * ---
 singlePack('[First Task] Error Message Test',  () => {
@@ -119,6 +121,9 @@ singlePack('[Second Task] Promotion Product Name Test', () => {
 //   });
 // });
 
+
+
+// --- * CLOSE BROWSER * ---
 singlePack('Example single Pack tests for Letu.ru', () => {
   test('Close Browser', async () => {
 
@@ -150,3 +155,4 @@ singlePack('Example single Pack tests for Letu.ru', () => {
     await browser.close()
   })
 });
+// --- * CLOSE BROWSER * ---
