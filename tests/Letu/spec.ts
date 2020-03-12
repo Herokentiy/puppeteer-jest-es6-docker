@@ -21,63 +21,63 @@ singlePack('Set cookie and useragent', async () => {
   });
 });
 // --- * COOKIE and USERAGENT * ---
-
-// --- * FIRST TASK * ---
-singlePack('[First Task] Error Message Test',  () => {
-
-  const subscribeSelectors = {
-    inputFieldEmail: '#footer .subscribe-form input[type="email"]',
-    divErrorBox: '#footer .ws-errorbox p.help-block',
-    successfulSubscribe: '.subscribed-message',
-    buttonSubscribe: '#footer button.btn-rd-subscribe',
-  };
-
-  const expectedMessage = {
-    "successfulSubscribe": {text: "Вы успешно подписались, спасибо!", location: subscribeSelectors.successfulSubscribe},
-    "alreadySubscribed": {text: "Введенный Вами адрес e-mail уже находится в списке рассылки новостей.", location: subscribeSelectors.divErrorBox},
-    "invalidEmail": {text: "Неверный формат email", location: subscribeSelectors.divErrorBox},
-  };
-
-  const oneRandomEmail = faker.internet.email();
-
-  const emailsTest = [{
-    email: oneRandomEmail,
-    result : expectedMessage.successfulSubscribe,
-  },
-    {
-      email: oneRandomEmail,
-      result : expectedMessage.alreadySubscribed,
-    },
-    {
-      email: "asdas@sfdd.ru",
-      result : expectedMessage.alreadySubscribed,
-    },
-    {
-      email: "a123dq43wsf3as4313*/*d",
-      result : expectedMessage.invalidEmail,
-    },
-    {
-      email: "jhj143kj1@gdbd.dfg",
-      result : expectedMessage.invalidEmail,
-    }];
-
-
-  emailsTest.forEach (async (obj) => {
-    test(`Checked email: "${obj.email}" expected: "${obj.result.text}"`, async () => {
-      await openHomePage();
-      await LetuPage.hover(subscribeSelectors.inputFieldEmail);
-      // await LetuPage.type(subscribeSelectors.inputFieldEmail, "");
-      // await LetuPage.clickPuppeteer(subscribeSelectors.buttonSubscribe);
-      // await LetuPage.waitToBeInvisible(subscribeSelectors.divErrorBox);
-      await LetuPage.type(subscribeSelectors.inputFieldEmail, obj.email);
-      await LetuPage.clickPuppeteer(subscribeSelectors.buttonSubscribe);
-      let result = await LetuPage.getText(obj.result.location);
-      expect(obj.result.text).toEqual(result);
-    });
-  });
-});
-// --- * FIRST TASK * ---
-
+//
+// // --- * FIRST TASK * ---
+// singlePack('[First Task] Error Message Test',  () => {
+//
+//   const subscribeSelectors = {
+//     inputFieldEmail: '#footer .subscribe-form input[type="email"]',
+//     divErrorBox: '#footer .ws-errorbox p.help-block',
+//     successfulSubscribe: '.subscribed-message',
+//     buttonSubscribe: '#footer button.btn-rd-subscribe',
+//   };
+//
+//   const expectedMessage = {
+//     "successfulSubscribe": {text: "Вы успешно подписались, спасибо!", location: subscribeSelectors.successfulSubscribe},
+//     "alreadySubscribed": {text: "Введенный Вами адрес e-mail уже находится в списке рассылки новостей.", location: subscribeSelectors.divErrorBox},
+//     "invalidEmail": {text: "Неверный формат email", location: subscribeSelectors.divErrorBox},
+//   };
+//
+//   const oneRandomEmail = faker.internet.email();
+//
+//   const emailsTest = [{
+//     email: oneRandomEmail,
+//     result : expectedMessage.successfulSubscribe,
+//   },
+//     {
+//       email: oneRandomEmail,
+//       result : expectedMessage.alreadySubscribed,
+//     },
+//     {
+//       email: "asdas@sfdd.ru",
+//       result : expectedMessage.alreadySubscribed,
+//     },
+//     {
+//       email: "a123dq43wsf3as4313*/*d",
+//       result : expectedMessage.invalidEmail,
+//     },
+//     {
+//       email: "jhj143kj1@gdbd.dfg",
+//       result : expectedMessage.invalidEmail,
+//     }];
+//
+//
+//   emailsTest.forEach (async (obj) => {
+//     test(`Checked email: "${obj.email}" expected: "${obj.result.text}"`, async () => {
+//       await openHomePage();
+//       await LetuPage.hover(subscribeSelectors.inputFieldEmail);
+//       // await LetuPage.type(subscribeSelectors.inputFieldEmail, "");
+//       // await LetuPage.clickPuppeteer(subscribeSelectors.buttonSubscribe);
+//       // await LetuPage.waitToBeInvisible(subscribeSelectors.divErrorBox);
+//       await LetuPage.type(subscribeSelectors.inputFieldEmail, obj.email);
+//       await LetuPage.clickPuppeteer(subscribeSelectors.buttonSubscribe);
+//       let result = await LetuPage.getText(obj.result.location);
+//       expect(obj.result.text).toEqual(result);
+//     });
+//   });
+// });
+// // --- * FIRST TASK * ---
+//
 
 singlePack('[Second Task] Promotion Product Name Test', () => {
   const selector = {
@@ -90,15 +90,11 @@ singlePack('[Second Task] Promotion Product Name Test', () => {
   test('Second Task', async () => {
     await openHomePage();
     await LetuPage.clickPuppeteer(selector.allActionsButton);
-    await LetuPage.clickPuppeteer(selector.actionsItems);
-    await LetuPage.clickElementFromList(selector.resultListForPromo);
-    let result = LetuPage.getText(selector.pdpItemHeader);
-    console.log(`My name this is: ${result}`);
+    let listPromoAction = await LetuPage.clickElementFromList(selector.actionsItems, 2)
+    let resultItemsList = await LetuPage.clickElementFromList(selector.resultListForPromo,1)
+    let headerForItem = await LetuPage.getText(selector.pdpItemHeader);
+    console.log(`My name this is: ${headerForItem}`);
 
-
-
-
-    console.log("Run test Second ....")
   });
 });
 
